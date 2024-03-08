@@ -1,6 +1,7 @@
 package com.example.lab8;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,23 +27,16 @@ public class CustomList extends ArrayAdapter<City> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
         View view = convertView;
-
         if(view == null){
             view = LayoutInflater.from(context).inflate(R.layout.content, parent,false);
         }
-
         City city = cities.get(position);
-
         TextView cityName = view.findViewById(R.id.city_text);
         TextView provinceName = view.findViewById(R.id.province_text);
-
         cityName.setText(city.getCityName());
         provinceName.setText(city.getProvinceName());
-
         return view;
-
     }
 
     public int getCount(){
@@ -53,4 +47,24 @@ public class CustomList extends ArrayAdapter<City> {
         cities.add(city);
     }
 
+    // TDD Methods
+    public boolean hasCity(String cityName) {
+        for (City city : cities) {
+            if (city.getCityName().equals(cityName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteCity(String cityName) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return cities.removeIf(city -> city.getCityName().equals(cityName));
+        }
+        return false;
+    }
+
+    public int countCities() {
+        return cities.size(); // This could be redundant given getCount() exists, but implemented as per instruction
+    }
 }

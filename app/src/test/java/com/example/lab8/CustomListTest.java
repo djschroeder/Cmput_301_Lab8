@@ -1,38 +1,38 @@
 package com.example.lab8;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
-//import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomListTest {
     private CustomList list;
-    /**
-     * create a mocklist for my citylist
-     * @return
-     */
-    public CustomList MockCityList(){
-        list = new CustomList(null,new ArrayList<>());
-        return list;
-    }
 
-    /**
-     * get the size of the list
-     * increase the list by adding a new city
-     * check if our current size matches the initial size
-     plus one
-     */
-    @Test
-    public void addCityTest(){
-        list = MockCityList();
-        int listSize = list.getCount();
+    @BeforeEach
+    public void setUp() {
+        list = new CustomList(null, new ArrayList<>());
+        // Adding initial cities for testing
         list.addCity(new City("Estevan", "SK"));
-        assertEquals(list.getCount(),listSize + 1);
+        list.addCity(new City("Regina", "SK"));
     }
 
+    @Test
+    public void hasCityTest() {
+        assertTrue(list.hasCity("Estevan"));
+        assertFalse(list.hasCity("Calgary"));
+    }
+
+    @Test
+    public void deleteCityTest() {
+        assertTrue(list.deleteCity("Estevan"));
+        assertFalse(list.hasCity("Estevan")); // Verify city was deleted
+        assertFalse(list.deleteCity("Calgary")); // Verify false when trying to delete a non-existent city
+    }
+
+    @Test
+    public void countCitiesTest() {
+        assertEquals(2, list.countCities());
+        list.addCity(new City("Saskatoon", "SK"));
+        assertEquals(3, list.countCities()); // Verify count after adding a city
+    }
 }
