@@ -1,7 +1,6 @@
 package com.example.lab8;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,11 +57,17 @@ public class CustomList extends ArrayAdapter<City> {
     }
 
     public boolean deleteCity(String cityName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return cities.removeIf(city -> city.getCityName().equals(cityName));
+        boolean found = false;
+        for (int i = 0; i < cities.size(); i++) {
+            if (cities.get(i).getCityName().equals(cityName)) {
+                cities.remove(i);
+                found = true;
+                break;
+            }
         }
-        return false;
+        return found;
     }
+
 
     public int countCities() {
         return cities.size(); // This could be redundant given getCount() exists, but implemented as per instruction
